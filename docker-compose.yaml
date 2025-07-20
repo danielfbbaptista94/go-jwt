@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  go_app:
+    container_name: go_app
+    image: go-jwt
+    ports:
+      - "3000:3000"
+    depends_on:
+      - go_mysql
+  go_mysql:
+    container_name: go_mysql
+    image: mysql:8.0.26
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: gojwt
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - db-data:/var/lib/mysql
+volumes:
+  db-data: {}
