@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"go-jwt/initializers"
-	"go-jwt/models"
+	"go-jwt/dtos"
+	"go-jwt/services"
 	"net/http"
 	"os"
 	"time"
@@ -12,7 +12,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Signup(c *gin.Context) {
+type userController struct {
+	userService services.UserService
+}
+
+func NewUserController(userService services.UserService) userController {
+	return userController{
+		userService: userService,
+	}
+}
+
+func (u *userController) Signup(c *gin.Context) {
 	var body struct {
 		Email    string
 		Password string
@@ -26,7 +36,6 @@ func Signup(c *gin.Context) {
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
-
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to hash password",
@@ -34,20 +43,19 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	user := models.UserModel{Email: body.Email, Password: string(hash)}
-
-	result := initializers.DB.Create(&user)
-
-	if result.Error != nil {
+	var userDTO = dtos.UserDTO{Email: body.Email, Password: string(hash)}
+	err = u.userService.Signup(&userDTO)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to create user",
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{})
 }
 
-func Login(c *gin.Context) {
+func (u *userController) Login(c *gin.Context) {
 	var body struct {
 		Email    string
 		Password string
@@ -60,18 +68,15 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	var user models.UserModel
-	initializers.DB.First(&user, "email = ?", body.Email)
-
-	if user.ID == 0 {
+	user, err := u.userService.FindByEmail(body.Email)
+	if user.Id == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "User email incorrect",
+			"error": err,
 		})
 		return
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
-
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "User Password incorrect",
@@ -80,7 +85,7 @@ func Login(c *gin.Context) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": user.ID,
+		"sub": user.Id,
 		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
 
@@ -99,14 +104,14 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
-func Validate(c *gin.Context) {
+func (u *userController) Validate(c *gin.Context) {
 	user, _ := c.Get("user")
 	c.JSON(http.StatusOK, gin.H{
 		"message": user,
 	})
 }
 
-func Logout(c *gin.Context) {
+func (u *userController) Logout(c *gin.Context) {
 	c.SetCookie("Authorization", "", 0, "", "", false, true)
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Logged out successfully",
