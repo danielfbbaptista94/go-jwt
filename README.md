@@ -6,6 +6,7 @@ A simple JWT-based authentication API built with Golang. This project uses JSON 
 
 ```
 |   .env
+|   .gitignore
 |   docker-compose.yaml
 |   Dockerfile
 |   go-jwt.exe
@@ -13,20 +14,83 @@ A simple JWT-based authentication API built with Golang. This project uses JSON 
 |   go.mod
 |   go.sum
 |   main.go
-|   
-+---controllers
-|       userController.go
-|       
-+---initializers
-|       dbConnection.go
-|       loadEnvViariables.go
-|       syncDatabase.go
+|   README.md
 |
-+---middleware
-|       requireAuth.go
++---.idea
+|   |   .gitignore
+|   |   dataSources.local.xml
+|   |   dataSources.xml
+|   |   encodings.xml
+|   |   go-jwt.iml
+|   |   modules.xml
+|   |   vcs.xml
+|   |   workspace.xml
+|   |
+|   \---dataSources
+|       |   3649f9f6-1aa2-4547-b9d7-c01597b20422.xml
+|       |
+|       \---3649f9f6-1aa2-4547-b9d7-c01597b20422
+|           \---storage_v2
+|               \---_src_
+|                   \---schema
+|                           information_schema.FNRwLQ.meta
+|                           mysql.osA4Bg.meta
+|                           performance_schema.kIw0nw.meta
+|                           sys.zb4BAA.meta
+|
++---configuration
+|   +---initializers
+|   |       dbConnection.go
+|   |       loadEnvViariables.go
+|   |       syncDatabase.go
+|   |
+|   +---loggerHandler
+|   |       loggerHandler.go
+|   |
+|   +---middleware
+|   |       requireAuth.go
+|   |
+|   \---validation
+|           validateUser.go
+|
++---controllers
+|   |   login.go
+|   |   logout.go
+|   |   signup.go
+|   |   userController.go
+|   |
+|   +---requestDTO
+|   |       loginDTO.go
+|   |       signUpDTO.go
+|   |
+|   \---routes
+|           routes.go
+|
++---domain
+|   \---user
+|       |   userDomain.go
+|       |
+|       \---services
+|               createUser.go
+|               findUser.go
+|               userInterface.go
+|
++---dtos
+|       userDto.go
+|
++---errorHandler
+|       errorHandler.go
 |
 \---models
-        userModel.go
+    \---user
+        +---entities
+        |       userModel.go
+        |
+        \---repositories
+                createUserRepository.go
+                findUserRepository.go
+                userRepository.go
+
 ```
 
 ---

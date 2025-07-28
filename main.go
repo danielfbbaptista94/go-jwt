@@ -1,11 +1,12 @@
 package main
 
 import (
+	"go-jwt/configuration/initializers"
+	loggerhandler "go-jwt/configuration/loggerHandler"
 	"go-jwt/controllers"
-	"go-jwt/initializers"
-	"go-jwt/middleware"
-	"go-jwt/repositories"
-	"go-jwt/services"
+	"go-jwt/controllers/routes"
+	"go-jwt/domain/user/services"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,16 +18,15 @@ func init() {
 }
 
 func main() {
-	r := gin.Default()
+	loggerhandler.Info("About to start application")
 
-	UserRepository := repositories.NewUserRepository()
-	UserService := services.NewUserService(UserRepository)
-	UserController := controllers.NewUserController(UserService)
+	service := services.NewUserDomainService()
+	userController := controllers.NewUserControllerInterface(service)
 
-	r.POST("/signup", UserController.Signup)
-	r.POST("/login", UserController.Login)
-	r.GET("/validate", middleware.RequireAuth, UserController.Validate)
-	r.GET("/logout", middleware.RequireAuth, UserController.Logout)
+	router := gin.Default()
+	routes.InitRoutes(&router.RouterGroup, userController)
 
-	r.Run()
+	if err := router.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
