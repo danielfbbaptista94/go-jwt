@@ -16,28 +16,6 @@ A simple JWT-based authentication API built with Golang. This project uses JSON 
 |   main.go
 |   README.md
 |
-+---.idea
-|   |   .gitignore
-|   |   dataSources.local.xml
-|   |   dataSources.xml
-|   |   encodings.xml
-|   |   go-jwt.iml
-|   |   modules.xml
-|   |   vcs.xml
-|   |   workspace.xml
-|   |
-|   \---dataSources
-|       |   3649f9f6-1aa2-4547-b9d7-c01597b20422.xml
-|       |
-|       \---3649f9f6-1aa2-4547-b9d7-c01597b20422
-|           \---storage_v2
-|               \---_src_
-|                   \---schema
-|                           information_schema.FNRwLQ.meta
-|                           mysql.osA4Bg.meta
-|                           performance_schema.kIw0nw.meta
-|                           sys.zb4BAA.meta
-|
 +---configuration
 |   +---initializers
 |   |       dbConnection.go
