@@ -10,10 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	UserDomainInterface domain.UserDomainInterface
-)
-
 func (uc *userController) Signup(c *gin.Context) {
 	loggerhandler.Info("Init SignUp controller")
 	var signup requestdto.SignupDTO

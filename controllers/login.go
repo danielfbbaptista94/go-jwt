@@ -1,16 +1,11 @@
 package controllers
 
 import (
+	"github.com/gin-gonic/gin"
 	loggerhandler "go-jwt/configuration/loggerHandler"
 	"go-jwt/configuration/validation"
 	requestdto "go-jwt/controllers/requestDTO"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
-	"os"
-	"time"
-
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 )
 
 func (uc *userController) Login(c *gin.Context) {
@@ -24,37 +19,16 @@ func (uc *userController) Login(c *gin.Context) {
 		return
 	}
 
-	user, err := uc.service.FindUser(loginDTO.Email)
-	if user == nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+	_, token, err := uc.service.Login(loginDTO)
+	if err != nil {
+		c.JSON(err.Code, gin.H{
 			"error": err,
 		})
 		return
 	}
 
-	errPassword := bcrypt.CompareHashAndPassword([]byte(user.GetPassword()), []byte(loginDTO.Password))
-	if errPassword != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Password is wrong",
-		})
-		return
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": user.GetEmail(),
-		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
-	})
-
-	tokenString, tokenErr := token.SignedString([]byte(os.Getenv("SECRET")))
-	if tokenErr != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to create token",
-		})
-		return
-	}
-
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("Authorization", tokenString, 3600, "", "", false, true)
+	c.SetCookie("Authorization", token, 3600, "", "", false, true)
 
 	c.JSON(http.StatusOK, gin.H{})
 }

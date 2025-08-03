@@ -6,6 +6,7 @@ import (
 	"go-jwt/controllers"
 	"go-jwt/controllers/routes"
 	"go-jwt/domain/user/services"
+	"go-jwt/models/user/repositories"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +21,8 @@ func init() {
 func main() {
 	loggerhandler.Info("About to start application")
 
-	service := services.NewUserDomainService()
+	repository := repositories.NewUserRepository()
+	service := services.NewUserDomainService(repository)
 	userController := controllers.NewUserControllerInterface(service)
 
 	router := gin.Default()

@@ -19,7 +19,7 @@ func (u *userRepository) CreateUser(
 		return nil
 	})
 	if err != nil {
-		return nil, errorhandler.NewBadRequestError("Error create User")
+		return nil, errorhandler.NewInternalError("error creating user")
 	}
 
 	return userDomain, nil

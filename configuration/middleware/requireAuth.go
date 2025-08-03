@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 	"go-jwt/domain/user/services"
+	"go-jwt/models/user/repositories"
 	"net/http"
 	"os"
 	"time"
@@ -33,7 +34,8 @@ func RequireAuth(c *gin.Context) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 
-		service := services.NewUserDomainService()
+		repo := repositories.NewUserRepository()
+		service := services.NewUserDomainService(repo)
 		user, errFind := service.FindUser(claims["sub"].(string))
 
 		//var user entities.UserModel
