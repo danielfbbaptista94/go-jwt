@@ -87,7 +87,7 @@ func TestUserController_Login(t *testing.T) {
 
 		request := requestdto.LoginDTO{
 			Email:    "teste@mail.com",
-			Password: "password",
+			Password: "12345",
 		}
 
 		b, _ := json.Marshal(request)

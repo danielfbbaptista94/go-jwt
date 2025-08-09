@@ -56,6 +56,21 @@ func (mr *MockUserDomainServiceMockRecorder) CreateUser(arg0 any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUserDomainService)(nil).CreateUser), arg0)
 }
 
+// FindUser mocks base method.
+func (m *MockUserDomainService) FindUser(arg0 string) (domain.UserDomainInterface, *errorhandler.ErrorHandler) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindUser", arg0)
+	ret0, _ := ret[0].(domain.UserDomainInterface)
+	ret1, _ := ret[1].(*errorhandler.ErrorHandler)
+	return ret0, ret1
+}
+
+// FindUser indicates an expected call of FindUser.
+func (mr *MockUserDomainServiceMockRecorder) FindUser(arg0 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUser", reflect.TypeOf((*MockUserDomainService)(nil).FindUser), arg0)
+}
+
 // Login mocks base method.
 func (m *MockUserDomainService) Login(arg0 requestdto.LoginDTO) (domain.UserDomainInterface, string, *errorhandler.ErrorHandler) {
 	m.ctrl.T.Helper()

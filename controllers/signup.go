@@ -26,5 +26,5 @@ func (uc *userController) Signup(c *gin.Context) {
 		c.JSON(err.Code, err)
 	}
 
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusCreated, gin.H{})
 }
