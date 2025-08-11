@@ -1,0 +1,110 @@
+definitions:
+  errorhandler.Causes:
+    properties:
+      field:
+        type: string
+      message:
+        type: string
+    type: object
+  errorhandler.ErrorHandler:
+    properties:
+      causes:
+        items:
+          $ref: '#/definitions/errorhandler.Causes'
+        type: array
+      code:
+        type: integer
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  requestdto.LoginDTO:
+    properties:
+      email:
+        example: test@email.com
+        type: string
+      password:
+        example: "123456"
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  requestdto.SignupDTO:
+    properties:
+      email:
+        example: test@email.com
+        type: string
+      password:
+        example: "123456"
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+info:
+  contact: {}
+  description: A API for User Authentication
+  termsOfService: http://swagger.io/terms/
+  title: Swagger API
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Allows a user to log in and obtain an authentication token.
+      parameters:
+      - description: User login credentials
+        in: body
+        name: loginDTO
+        required: true
+        schema:
+          $ref: '#/definitions/requestdto.LoginDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: 'error: Invalid login credentials'
+          schema:
+            $ref: '#/definitions/errorhandler.ErrorHandler'
+      summary: User Login
+      tags:
+      - Authentication
+  /logout:
+    post:
+      description: Allows a user to log out and clear the cookie Authorization.
+      responses: {}
+      summary: User Logout
+      tags:
+      - Authentication
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Allows a user to sign up.
+      parameters:
+      - description: User signup data
+        in: body
+        name: signup
+        required: true
+        schema:
+          $ref: '#/definitions/requestdto.SignupDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: 'error: Invalid signup credentials'
+          schema:
+            $ref: '#/definitions/errorhandler.ErrorHandler'
+      summary: User Signup
+      tags:
+      - Registration
+swagger: "2.0"

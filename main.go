@@ -12,6 +12,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @title Swagger API
+// @version 1.0
+// @description A API for User Authentication
+// @termsOfService http://swagger.io/terms/
 func init() {
 	initializers.LoadEnvVariables()
 	initializers.DbConnection()

@@ -10,6 +10,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Signup allows a user to sign up
+// @Summary User Signup
+// @Description Allows a user to sign up.
+// @Tags Registration
+// @Accept json
+// @Produce json
+// @Param signup body requestdto.SignupDTO true "User signup data"
+// @Success 200
+// @Failure 403 {object} errorhandler.ErrorHandler "error: Invalid signup credentials"
+// @Router /signup [post]
 func (uc *userController) Signup(c *gin.Context) {
 	loggerhandler.Info("Init SignUp controller")
 	var signup requestdto.SignupDTO
